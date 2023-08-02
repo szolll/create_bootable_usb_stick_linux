@@ -55,40 +55,45 @@ Improve Battery for laptops
 3.D
 If asked select lightdm
               
-              4
+4
 Add vscodium for dev
               
               wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/usr/share/keyrings/vscodium-archive-keyring.gpg
               
-              4.A
+4.A
 Add the vscodium repository
               
               echo 'deb [ signed-by=/usr/share/keyrings/vscodium-archive-keyring.gpg ] https://download.vscodium.com/debs vscodium main' | sudo tee /etc/apt/sources.list.d/vscodium.list
               
-              5 
+5 
 Add Chrome Browser
               
-              5.A
+5.A
 
 Add key
-              wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+
+                 wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
               
-              5.B
+5.B
 Add Repo
+
               echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
               
-              5.C
+5.C
 Now update apt
+
               apt-get update
               
-              5.F
+5.F
 And install Chrome
+
               apt-get install google-chrome-stable
               
               
               
-              6
+6
 Purge Unwanted software
+
               apt-get purge -y transmission-gtk transmission-common gnome-mahjongg gnome-mines gnome-sudoku aisleriot hitori
               
               
