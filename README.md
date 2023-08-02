@@ -8,9 +8,9 @@ On your host system
            sudo apt-get update ; sudo apt-get install live-build -y
 
 
-1 
+1 Switch to root
 
-             sudo su -
+              sudo su -
 
 2
 Download the os with debootstrap, check debootstrap for other OS's you can install
@@ -22,65 +22,73 @@ Customize your OS with help of chroot (* Changes made after this point are store
                      
               chroot /tmp/focal_tree; [...]; exit
                      
-              3.A Prep apt 
-              apt update -y ; apt upgrade ; apt install apt-transport-https
-                            
-                            
-              3.B Add universe repo
+3.A 
+Prep apt 
+              
+              apt update -y ; apt upgrade ; apt install apt-transport-https            
+                          
+3.B
+Add universe repo
+
               add-apt-repository universe ; add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse" ;  apt-get update
                           
-              3.C Install more commen Software
+3.C Install more commen Software
+
               apt install net-tools terminator vim xfce4 xfce4-terminal xfce4-goodies xubuntu-desktop openssh-server tigervnc-viewer sudo wireless-tools laptop-detect locales curl clamav-daemon nano less gparted gedit
 
-                            3.C.1
-                            For server recovery 
+3.C.1
+For server recovery 
                             
-                            apt install ipmitool
+              apt install ipmitool
 
-                            3.C.2
-                            Improve Battery for laptops
+3.C.2
+Improve Battery for laptops
                             
-                            apt instal tlp tlp-rdw ; tlp start
+               apt install tlp tlp-rdw ; tlp start ; systemctl enable tlp.service
 
 
-Optionally install
-sudo add-apt-repository ppa:apt-fast/stable 
-sudo apt-get update
-sudo apt-get install apt-fast  
+                            Optionally install
+                            add-apt-repository ppa:apt-fast/stable ; apt-get update ; apt-get install apt-fast  
               
 
                             
-              3.D If asked select lightdm
+3.D
+If asked select lightdm
               
               4
-              Add vscodium for dev
+Add vscodium for dev
               
               wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/usr/share/keyrings/vscodium-archive-keyring.gpg
               
               4.A
-              Add the vscodium repository
+Add the vscodium repository
               
               echo 'deb [ signed-by=/usr/share/keyrings/vscodium-archive-keyring.gpg ] https://download.vscodium.com/debs vscodium main' | sudo tee /etc/apt/sources.list.d/vscodium.list
               
               5 
-              Add Chrome Browser
+Add Chrome Browser
               
               5.A
+
+Add key
               wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
               
               5.B
+Add Repo
               echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
               
               5.C
+Now update apt
               apt-get update
               
               5.F
+And install Chrome
               apt-get install google-chrome-stable
               
               
               
               6
-              Purge Unwanted software
+Purge Unwanted software
               apt-get purge -y transmission-gtk transmission-common gnome-mahjongg gnome-mines gnome-sudoku aisleriot hitori
               
               
@@ -90,7 +98,7 @@ sudo apt-get install apt-fast
 
               xx
               Add our favo user with a home dir
-              useradd -m username
+              useradd -m username <your_user_here>
               
               xx
               Clean up apt 
