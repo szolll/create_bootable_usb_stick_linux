@@ -3,50 +3,137 @@
 
 Quick and dirty how to create a bootable linux usb stick with your favo tools
 
+On your host system
+
+           sudo apt-get update ; sudo apt-get install live-build -y
+
+
 1 
 
-sudo su -
+             sudo su -
 
 2
 Download the os with debootstrap, check debootstrap for other OS's you can install
 
-debootstrap --variant=minbase focal /tmp/focal_tree
+              debootstrap --variant=minbase focal /tmp/focal_tree
 
 3
-Customize it your OS
-       
-chroot /tmp/focal_tree; [...]; exit
-       
-3.A Prep apt 
-apt update -y ; apt upgrade 
+Customize your OS with help of chroot (* Changes made after this point are stored only in the new live version)
+                     
+              chroot /tmp/focal_tree; [...]; exit
+                     
+              3.A Prep apt 
+              apt update -y ; apt upgrade ; apt install apt-transport-https
+                            
+                            
+              3.B Add universe repo
+              add-apt-repository universe ; add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse" ;  apt-get update
+                          
+              3.C Install more commen Software
+              apt install net-tools terminator vim xfce4 xfce4-terminal xfce4-goodies xubuntu-desktop openssh-server tigervnc-viewer sudo wireless-tools laptop-detect locales curl clamav-daemon nano less gparted gedit
+
+                            3.C.1
+                            For server recovery 
+                            
+                            apt install ipmitool
+
+                            3.C.2
+                            Improve Battery for laptops
+                            
+                            apt instal tlp tlp-rdw ; tlp start
+
+
+Optionally install
+sudo add-apt-repository ppa:apt-fast/stable 
+sudo apt-get update
+sudo apt-get install apt-fast  
+              
+
+                            
+              3.D If asked select lightdm
+              
+              4
+              Add vscodium for dev
+              
+              wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/usr/share/keyrings/vscodium-archive-keyring.gpg
+              
+              4.A
+              Add the vscodium repository
+              
+              echo 'deb [ signed-by=/usr/share/keyrings/vscodium-archive-keyring.gpg ] https://download.vscodium.com/debs vscodium main' | sudo tee /etc/apt/sources.list.d/vscodium.list
+              
+              5 
+              Add Chrome Browser
+              
+              5.A
+              wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+              
+              5.B
+              echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
+              
+              5.C
+              apt-get update
+              
+              5.F
+              apt-get install google-chrome-stable
               
               
-3.B Add universe repo
-sudo add-apt-repository universe ; 
               
-3.C Install Software
-apt install net-tools terminator vim xfce4 xfce4-terminal 
+              6
+              Purge Unwanted software
+              apt-get purge -y transmission-gtk transmission-common gnome-mahjongg gnome-mines gnome-sudoku aisleriot hitori
               
-3.D If asked select lightdm
+              
+              xx
+              Generate locales  (* select en_us_ISO-8859-1 and en_US.UTF-8 UTF-8 & then C.UTF-8 for default)
+              dpkg-reconfigure locales 
 
-3.F  Add vscodium
-wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/usr/share/keyrings/vscodium-archive-keyring.gpg
+              xx
+              Add our favo user with a home dir
+              useradd -m username
+              
+              xx
+              Clean up apt 
+              
+              apt-get autoremove -y ; apt-get clean
+              
+              xx
+              Set hostname
+              
+              echo "ubuntu-fs-live" > /etc/hostname
+              
+              xx
+              Configure machine-id and divert
+              
+              dbus-uuidgen > /etc/machine-id ; ln -fs /etc/machine-id /var/lib/dbus/machine-id
+              
+              xx remove machine-id
+              truncate -s 0 /etc/machine-id
+              
+              xx 
+              rm -rf /tmp/* ~/.bash_history
+              export HISTSIZE=0
 
-3.G Add the vscodium repository
-echo 'deb [ signed-by=/usr/share/keyrings/vscodium-archive-keyring.gpg ] https://download.vscodium.com/debs vscodium main' | sudo tee /etc/apt/sources.list.d/vscodium.list
+              xx
+              Now Exit from the chroot
+              exit
+                      
 
-
-        
-4 Generate the bootable image:
+xx
+Generate the bootable image:
        
  debootstick --config-root-password-ask /tmp/jessie_tree /tmp/img.dd
 
- 4.A Enter root password for your new live stick
+ 5.A Enter root password for your new live stick
  
               Enter root password:
               Enter root password again:
 
-5.
+5
+
+
+
+
 Now inset a usb stick, and find the device name with
 
 lsblk
@@ -73,3 +160,9 @@ Looks somewhat like this..
        dd bs=10M if=/tmp/img.dd of=/dev/your-device
 
        The USB device may now be booted on any BIOS or UEFI system.
+
+
+Links
+https://manpages.ubuntu.com/manpages/jammy/en/man8/debootstrap.8.html
+https://howtoinstall.co/package/live-build
+https://manpages.ubuntu.com/manpages/focal/en/man8/debootstick.8.html
