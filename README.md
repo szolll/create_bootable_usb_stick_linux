@@ -1,7 +1,6 @@
-# create_bootable_usb_stick_linux
+# Create a bootable Live USB stick running Ubuntu or any other flavor of linux
 
-
-Quick and dirty how to create a bootable linux usb stick with your favo tools
+This is a quick and dirty how to create a bootable linux usb stick with your favo tools
 
 On your host system
 
@@ -47,8 +46,9 @@ Improve Battery for laptops
                apt install tlp tlp-rdw ; tlp start ; systemctl enable tlp.service
 
 
-                            Optionally install
-                            add-apt-repository ppa:apt-fast/stable ; apt-get update ; apt-get install apt-fast  
+Optionally install
+
+               add-apt-repository ppa:apt-fast/stable ; apt-get update ; apt-get install apt-fast  
               
 
                             
@@ -72,51 +72,51 @@ Add Chrome Browser
 
 Add key
 
-                 wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+               wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
               
 5.B
 Add Repo
 
-              echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
+               echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
               
 5.C
 Now update apt
 
-              apt-get update
+               apt-get update
               
 5.F
 And install Chrome
 
-              apt-get install google-chrome-stable
+               apt-get install google-chrome-stable
               
               
               
 6
 Purge Unwanted software
 
-              apt-get purge -y transmission-gtk transmission-common gnome-mahjongg gnome-mines gnome-sudoku aisleriot hitori
+               apt-get purge -y transmission-gtk transmission-common gnome-mahjongg gnome-mines gnome-sudoku aisleriot hitori
               
               
 xx
 
 Generate locales  (* select en_us_ISO-8859-1 and en_US.UTF-8 UTF-8 & then C.UTF-8 for default)
 
-              dpkg-reconfigure locales 
+               dpkg-reconfigure locales 
 
 xx
 Add our favo user with a home dir
 
-              useradd -m username <your_user_here>
+               useradd -m username <your_user_here>
               
 xx
 Clean up apt 
               
-              apt-get autoremove -y ; apt-get clean
+               apt-get autoremove -y ; apt-get clean
               
 xx
 Set hostname
               
-              echo "ubuntu-fs-live" > /etc/hostname
+               echo "ubuntu-fs-live" > /etc/hostname
               
 xx
 Configure machine-id and divert
@@ -142,7 +142,7 @@ Now Exit from the chroot
 xx
 Generate the bootable image:
        
-            debootstick --config-root-password-ask /tmp/jessie_tree /tmp/img.dd
+              debootstick --config-root-password-ask /tmp/jessie_tree /tmp/img.dd
 
  5.A Enter root password for your new live stick
  
@@ -156,31 +156,35 @@ Generate the bootable image:
 
 Now inset a usb stick, and find the device name with
 
-           lsblk
+            lsblk
 
 6
 Now write the dd image to the stick
 
-           sudo dd bs=10M if=Documents/live_ubu_focal_rescue.dd of=/dev/sdb
+            sudo dd bs=10M if=Documents/live_ubu_focal_rescue.dd of=/dev/sdb
 
 You should end up with something like this. 
 
-           554+1 records in
-           554+1 records out
-           5812256768 bytes (5,8 GB, 5,4 GiB) copied, 175,691 s, 33,1 MB/s
+            554+1 records in
+            554+1 records out
+            5812256768 bytes (5,8 GB, 5,4 GiB) copied, 175,691 s, 33,1 MB/s
 
 We'll test the stuff later...
 
 Looks somewhat like this.. 
 
-       cp /tmp/img.dd /tmp/img.dd-test    # let's work on a copy, our test is destructive
-       truncate -s 2G /tmp/img.dd-test    # simulate a copy on a 2G-large USB stick
-       kvm -m 2048 -hda /tmp/img.dd-test  # the test itself (BIOS mode)
+          cp /tmp/img.dd /tmp/img.dd-test    # let's work on a copy, our test is destructive
+          truncate -s 2G /tmp/img.dd-test    # simulate a copy on a 2G-large USB stick
+          kvm -m 2048 -hda /tmp/img.dd-test  # the test itself (BIOS mode)
 
-       5- Copy the boot image to a USB stick or disk.
-       dd bs=10M if=/tmp/img.dd of=/dev/your-device
+XX
 
-       The USB device may now be booted on any BIOS or UEFI system.
+Copy the boot image to a USB stick or disk.
+  
+          dd bs=10M if=/tmp/img.dd of=/dev/your-device
+
+
+The USB device is now to be booted on any BIOS or UEFI harrdware.
 
 
 Links
