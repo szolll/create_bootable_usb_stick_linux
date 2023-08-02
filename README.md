@@ -34,7 +34,7 @@ Add universe repo
                           
 3.C Install more commen Software
 
-              apt install  software-properties-common net-tools terminator vim xfce4 xfce4-terminal xfce4-goodies xubuntu-desktop openssh-server tldr tigervnc-viewer sudo wireless-tools laptop-detect locales curl clamav-daemon nano less gparted gedit
+              apt install  software-properties-common net-tools terminator filezilla vim xfce4 xfce4-terminal xfce4-goodies xubuntu-desktop openssh-server tldr tigervnc-viewer sudo wireless-tools laptop-detect locales curl clamav-daemon nano less gparted gedit
 
 3.C.1
 For server recovery 
@@ -92,45 +92,52 @@ Purge Unwanted software
               apt-get purge -y transmission-gtk transmission-common gnome-mahjongg gnome-mines gnome-sudoku aisleriot hitori
               
               
-              xx
-              Generate locales  (* select en_us_ISO-8859-1 and en_US.UTF-8 UTF-8 & then C.UTF-8 for default)
+xx
+
+Generate locales  (* select en_us_ISO-8859-1 and en_US.UTF-8 UTF-8 & then C.UTF-8 for default)
+
               dpkg-reconfigure locales 
 
-              xx
-              Add our favo user with a home dir
+xx
+Add our favo user with a home dir
+
               useradd -m username <your_user_here>
               
-              xx
-              Clean up apt 
+xx
+Clean up apt 
               
               apt-get autoremove -y ; apt-get clean
               
-              xx
-              Set hostname
+xx
+Set hostname
               
               echo "ubuntu-fs-live" > /etc/hostname
               
-              xx
-              Configure machine-id and divert
+xx
+Configure machine-id and divert
               
               dbus-uuidgen > /etc/machine-id ; ln -fs /etc/machine-id /var/lib/dbus/machine-id
               
-              xx remove machine-id
+xx 
+remove machine-id
+
               truncate -s 0 /etc/machine-id
               
-              xx 
+xx 
+
               rm -rf /tmp/* ~/.bash_history
               export HISTSIZE=0
 
-              xx
-              Now Exit from the chroot
+xx
+Now Exit from the chroot
+
               exit
                       
 
 xx
 Generate the bootable image:
        
- debootstick --config-root-password-ask /tmp/jessie_tree /tmp/img.dd
+            debootstick --config-root-password-ask /tmp/jessie_tree /tmp/img.dd
 
  5.A Enter root password for your new live stick
  
@@ -144,22 +151,23 @@ Generate the bootable image:
 
 Now inset a usb stick, and find the device name with
 
-lsblk
+           lsblk
 
 6
 Now write the dd image to the stick
 
-sudo dd bs=10M if=Documents/live_ubu_focal_rescue.dd of=/dev/sdb
+           sudo dd bs=10M if=Documents/live_ubu_focal_rescue.dd of=/dev/sdb
 
 You should end up with something like this. 
 
-554+1 records in
-554+1 records out
-5812256768 bytes (5,8 GB, 5,4 GiB) copied, 175,691 s, 33,1 MB/s
+           554+1 records in
+           554+1 records out
+           5812256768 bytes (5,8 GB, 5,4 GiB) copied, 175,691 s, 33,1 MB/s
 
 We'll test the stuff later...
 
 Looks somewhat like this.. 
+
        cp /tmp/img.dd /tmp/img.dd-test    # let's work on a copy, our test is destructive
        truncate -s 2G /tmp/img.dd-test    # simulate a copy on a 2G-large USB stick
        kvm -m 2048 -hda /tmp/img.dd-test  # the test itself (BIOS mode)
