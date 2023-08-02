@@ -34,7 +34,7 @@ Add universe repo
                           
 3.C Install more commen Software
 
-              apt install net-tools terminator vim xfce4 xfce4-terminal xfce4-goodies xubuntu-desktop openssh-server tldr tigervnc-viewer sudo wireless-tools laptop-detect locales curl clamav-daemon nano less gparted gedit
+              apt install  software-properties-common net-tools terminator vim xfce4 xfce4-terminal xfce4-goodies xubuntu-desktop openssh-server tldr tigervnc-viewer sudo wireless-tools laptop-detect locales curl clamav-daemon nano less gparted gedit
 
 3.C.1
 For server recovery 
