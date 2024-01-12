@@ -1,5 +1,8 @@
 # Create a bootable Live USB stick running Ubuntu or any other flavor of linux
 
+You can run the bash script "create_bootable_usb.sh" or follow the steps provided below
+
+
 This is a quick and dirty how to create a bootable linux usb stick with your favo tools
 
 On your host system
@@ -7,7 +10,8 @@ On your host system
            sudo apt-get update ; sudo apt-get install live-build -y
 
 
-1 Switch to root
+1 
+Switch to root
 
               sudo su -
 
@@ -45,14 +49,15 @@ Improve Battery for laptops
                             
                apt install tlp tlp-rdw ; tlp start ; systemctl enable tlp.service
 
-
+3.D
 Optionally install
 
                add-apt-repository ppa:apt-fast/stable ; apt-get update ; apt-get install apt-fast  
               
 
                             
-3.D
+3.D.1
+
 If asked select lightdm
               
 4
@@ -91,74 +96,70 @@ And install Chrome
               
               
               
-6
+6.
 Purge Unwanted software
 
                apt-get purge -y transmission-gtk transmission-common gnome-mahjongg gnome-mines gnome-sudoku aisleriot hitori
               
               
-xx
-
+7.
 Generate locales  (* select en_us_ISO-8859-1 and en_US.UTF-8 UTF-8 & then C.UTF-8 for default)
 
                dpkg-reconfigure locales 
 
-xx
+8.
 Add our favo user with a home dir
 
                useradd -m username <your_user_here>
               
-xx
+9.
 Clean up apt 
               
                apt-get autoremove -y ; apt-get clean
               
-xx
+10.
 Set hostname
               
                echo "ubuntu-fs-live" > /etc/hostname
               
-xx
+11.
 Configure machine-id and divert
               
               dbus-uuidgen > /etc/machine-id ; ln -fs /etc/machine-id /var/lib/dbus/machine-id
               
-xx 
-remove machine-id
+12. 
+Remove machine-id
 
               truncate -s 0 /etc/machine-id
               
-xx 
-
+13.
+Clean up bash_history
               rm -rf /tmp/* ~/.bash_history
               export HISTSIZE=0
 
-xx
+14.
 Now Exit from the chroot
 
               exit
                       
 
-xx
+15.
 Generate the bootable image:
        
               debootstick --config-root-password-ask /tmp/jessie_tree /tmp/img.dd
 
- 5.A Enter root password for your new live stick
+ 15.A
+ Enter root password for your new live stick
  
               Enter root password:
               Enter root password again:
 
-5
-
-
-
-
+16.
 Now inset a usb stick, and find the device name with
 
             lsblk
 
-6
+17.
 Now write the dd image to the stick
 
             sudo dd bs=10M if=Documents/live_ubu_focal_rescue.dd of=/dev/sdb
@@ -177,7 +178,7 @@ Looks somewhat like this..
           truncate -s 2G /tmp/img.dd-test    # simulate a copy on a 2G-large USB stick
           kvm -m 2048 -hda /tmp/img.dd-test  # the test itself (BIOS mode)
 
-XX
+18.
 
 Copy the boot image to a USB stick or disk.
   
