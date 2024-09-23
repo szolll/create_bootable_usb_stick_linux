@@ -7,7 +7,7 @@ This is a quick and dirty guide to creating a bootable Linux USB stick with your
 
 On your host system, first update your package list and install `live-build`:
 
-```bash
+```
 sudo apt-get update && sudo apt-get install live-build -y
 ```
 
